@@ -1,0 +1,565 @@
+{
+	"info": {
+		"_postman_id": "cef65c3b-8b5b-4329-bdd2-2502b2b3457f",
+		"name": "Rookiesbatch6_API_Practice_NgocLy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24324489"
+	},
+	"item": [
+		{
+			"name": "1 -Generate an unique ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var dataHeader = pm.response.headers.get(\"Location\");\r",
+							"var CHALLENGE = dataHeader.split('/')[3];\r",
+							"console.log(CHALLENGE);\r",
+							"pm.environment.set(\"X-CHALLENGE\",CHALLENGE);\r",
+							"pm.test(\"Check status code: 201\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/challenger",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"challenger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - Get list challenger",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/challenges",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"challenges"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3 - Get list todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"console.log(jsonData.todos[0].id);\r",
+							"pm.environment.set(\"valid_todo_id\",jsonData.todos[0].id);\r",
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/todos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4 - GET /todo (404) not plural Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 404\", function(){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGE",
+						"value": "{{X-CHALLENGER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/todo",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 - Get valid todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/todos/{{valid_todo_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos",
+						"{{valid_todo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 - get invalid todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 404\", function(){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/todos/00",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos",
+						"00"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7 - get todo list (just header)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "HEAD",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/todos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8 - create a todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 201\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"create todo process payroll\",\r\n    \"doneStatus\": \"true\",\r\n    \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9 - Filter todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos?id={{valid_todo_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{valid_todo_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10 - create a todo with invalid information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"create todo process payroll\",\r\n    \"doneStatus\": \"hehe\",\r\n    \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11 - update a todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"update todo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos/{{valid_todo_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos",
+						"{{valid_todo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12 - delete todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"update todo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos/{{valid_todo_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos",
+						"{{valid_todo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13 - check option request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var dataHeader = pm.response.headers.get(\"Allow\");\r",
+							"console.log(dataHeader);\r",
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"pm.test(\"check Allow header has OPTIONS value\", function(){\r",
+							"    pm.expect(dataHeader).to.contain(\"OPTIONS\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "X-CHALLENGER",
+						"value": "{{X-CHALLENGE}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/todos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
